@@ -5,10 +5,12 @@ class AnimeCard extends StatelessWidget {
       {super.key,
       required this.title,
       required this.imageUrl,
-      required this.id});
+      required this.id,
+      required this.favorite});
   final String title;
   final String imageUrl;
   final int id;
+  final bool favorite;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -18,14 +20,23 @@ class AnimeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         child: Column(children: [
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(imageUrl),
+            child: Stack(children: [
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(imageUrl),
+                  ),
                 ),
               ),
-            ),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  favorite ? Icons.favorite : Icons.favorite_border,
+                  // color: Colors.red,
+                ),
+              ),
+            ]),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),

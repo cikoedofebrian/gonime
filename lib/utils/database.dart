@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/favorite.dart';
 import 'package:path/path.dart';
@@ -7,8 +8,8 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     return openDatabase(
       join(dbPath, 'gonime.db'),
-      onCreate: (db, version) => db
-          .execute('CREATE TABLE notes(id TEXT PRIMARY KEY, bool isfavorite)'),
+      onCreate: (db, version) =>
+          db.execute('CREATE TABLE favoritesanime(id TEXT PRIMARY KEY)'),
       version: 1,
     );
   }

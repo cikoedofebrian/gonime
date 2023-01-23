@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gonime/models/favorite.dart';
 import 'package:gonime/providers/anime_details_provider.dart';
+import 'package:gonime/providers/favorite_provider.dart';
+import 'package:gonime/utils/database.dart';
 import 'package:provider/provider.dart';
 
 class AnimeDetails extends StatefulWidget {
@@ -22,7 +25,9 @@ class _AnimeDetailsState extends State<AnimeDetails> {
     final String argument =
         (ModalRoute.of(context)!.settings.arguments as int).toString();
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.check))],
+      ),
       body: FutureBuilder(
         future: Provider.of<AnimeDProvider>(context).fetchDetails(argument),
         builder: (context, snapshot) => snapshot.connectionState ==
@@ -124,9 +129,13 @@ class _AnimeDetailsState extends State<AnimeDetails> {
               ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Provider.of<FavoriteProvider>(context, listen: false)
+              .toggleFavorite(argument, !isFavorite);
+          _FavoriteToggler();
+        },
         child: Icon(
-          isFavorite ? Icons.favorite_border : Icons.favorite,
+          !isFavorite ? Icons.favorite_border : Icons.favorite,
           color: Colors.white,
         ),
       ),
