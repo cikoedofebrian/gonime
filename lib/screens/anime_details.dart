@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gonime/models/card_arg.dart';
 import 'package:gonime/models/favorite.dart';
 import 'package:gonime/providers/anime_details_provider.dart';
 import 'package:gonime/providers/favorite_provider.dart';
@@ -6,30 +7,38 @@ import 'package:gonime/utils/database.dart';
 import 'package:provider/provider.dart';
 
 class AnimeDetails extends StatefulWidget {
-  const AnimeDetails({super.key});
+  AnimeDetails({super.key, required this.id, required this.isfavorite});
+  final id;
+  bool isfavorite;
 
   @override
   State<AnimeDetails> createState() => _AnimeDetailsState();
 }
 
 class _AnimeDetailsState extends State<AnimeDetails> {
-  void _FavoriteToggler() {
+  void _FavoriteToggler(CardArg arg) {
     setState(() {
-      isFavorite = !isFavorite;
+      arg.isfavorite = !arg.isfavorite;
     });
   }
 
-  bool isFavorite = false;
+  late Future future;
+
+  @override
+  void initState() {
+    future = Provider.of<AnimeDProvider>(context, listen: false)
+        .fetchDetails(widget.id);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final String argument =
-        (ModalRoute.of(context)!.settings.arguments as int).toString();
     return Scaffold(
       appBar: AppBar(
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.check))],
       ),
       body: FutureBuilder(
-        future: Provider.of<AnimeDProvider>(context).fetchDetails(argument),
+        future: future,
         builder: (context, snapshot) => snapshot.connectionState ==
                 ConnectionState.waiting
             ? const Center(child: CircularProgressIndicator())
@@ -131,11 +140,15 @@ class _AnimeDetailsState extends State<AnimeDetails> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Provider.of<FavoriteProvider>(context, listen: false)
-              .toggleFavorite(argument, !isFavorite);
-          _FavoriteToggler();
+              .toggleFavorite(widget.id, !widget.isfavorite);
+          setState(() {
+            widget.isfavorite = !widget.isfavorite;
+          });
+
+          // _FavoriteToggler(widget);
         },
         child: Icon(
-          !isFavorite ? Icons.favorite_border : Icons.favorite,
+          !widget.isfavorite ? Icons.favorite_border : Icons.favorite,
           color: Colors.white,
         ),
       ),

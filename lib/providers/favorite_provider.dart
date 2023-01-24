@@ -24,5 +24,6 @@ class FavoriteProvider extends ChangeNotifier {
       await database.rawDelete("DELETE from favoritesanime WHERE id='$id'");
       print("fek");
     }
+    notifyListeners();
   }
 }

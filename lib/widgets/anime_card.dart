@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gonime/models/card_arg.dart';
+import 'package:gonime/screens/anime_details.dart';
 
 class AnimeCard extends StatelessWidget {
   const AnimeCard(
@@ -14,8 +16,15 @@ class AnimeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () =>
-          Navigator.pushNamed(context, '/anime-details', arguments: id),
+      onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: ((context) => AnimeDetails(
+                    id: id.toString(),
+                    isfavorite: favorite,
+                  )))),
+      // onTap: () => Navigator.pushNamed(context, '/anime-details',
+      //     arguments: CardArg(id: id.toString(), isfavorite: favorite)),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Column(children: [

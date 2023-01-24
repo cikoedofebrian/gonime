@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.montserrat().fontFamily,
       ),
       home: const HomeScreen(),
-      routes: {'/anime-details': (context) => const AnimeDetails()},
     );
   }
 }
