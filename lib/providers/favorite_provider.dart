@@ -18,11 +18,11 @@ class FavoriteProvider extends ChangeNotifier {
   Future<void> toggleFavorite(String id, bool favorite) async {
     final database = await DatabaseHelper.database();
     if (favorite) {
+      _favorites.add(id);
       await database.rawInsert("INSERT INTO favoritesanime VALUES('$id')");
-      print("real");
     } else {
+      _favorites.removeWhere((element) => element == id);
       await database.rawDelete("DELETE from favoritesanime WHERE id='$id'");
-      print("fek");
     }
     notifyListeners();
   }
