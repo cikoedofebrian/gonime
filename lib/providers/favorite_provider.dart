@@ -10,27 +10,30 @@ class FavoriteProvider extends ChangeNotifier {
     return _favorites;
   }
 
-  void fetchData() async {
-    List<HomeAnime> templist = [];
-    final dio = Dio();
-    for (var item in _favorites) {
-      final url = "https://api.jikan.moe/v4/anime/$item";
-      final response = await dio.get(url);
-      // print(response.data);
-      final data = HomeAnime.fromJson(response.data);
-      templist.add(data);
-      Future.delayed(const Duration(milliseconds: 500));
-      // HomeAnime.fromJson(response.data);
-    }
-    _favorites_anime = templist;
-    notifyListeners();
+  List<HomeAnime> get favorites_anime {
+    return _favorites_anime;
   }
+
+  // Future<void> fetchData() async {
+  //   notifyListeners();
+  // }
 
   Future<void> getDatabase() async {
     final database = await DatabaseHelper.database();
     final data = await database.query('favoritesanime');
     final mappeddata = data.map((e) => e['id'] as String).toList();
     _favorites = mappeddata;
+    List<HomeAnime> templist = [];
+    final dio = Dio();
+    for (var item in mappeddata) {
+      final url = "https://api.jikan.moe/v4/anime/$item";
+      final response = await dio.get(url);
+      // print(response.data["data"]);
+      final data = HomeAnime.fromJson(response.data["data"]);
+      templist.add(data);
+      Future.delayed(const Duration(milliseconds: 600));
+    }
+    _favorites_anime = templist;
     notifyListeners();
   }
 
@@ -41,6 +44,7 @@ class FavoriteProvider extends ChangeNotifier {
       await database.rawInsert("INSERT INTO favoritesanime VALUES('$id')");
     } else {
       _favorites.removeWhere((element) => element == id);
+      _favorites_anime.removeWhere((element) => element.malId.toString() == id);
       await database.rawDelete("DELETE from favoritesanime WHERE id='$id'");
     }
     notifyListeners();

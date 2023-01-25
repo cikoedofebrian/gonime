@@ -1,34 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:gonime/models/favorite.dart';
-import 'package:gonime/providers/favorite_provider.dart';
-import 'package:gonime/utils/database.dart';
+import '../providers/favorite_provider.dart';
 import 'package:provider/provider.dart';
-import '../providers/anime_provider.dart';
 import '../widgets/anime_card.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class FavoriteScreen extends StatefulWidget {
+  const FavoriteScreen({super.key});
+
+  @override
+  State<FavoriteScreen> createState() => _FavoriteScreenState();
+}
+
+class _FavoriteScreenState extends State<FavoriteScreen> {
+  // late Future future1;
+  // late Future future2;
+
+  // @override
+  // void initState() {
+
+  //   future2 = Provider.of<FavoriteProvider>(context, listen: false).fetchData();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('GoNime'),
-        centerTitle: true,
-        backgroundColor: Colors.black,
-        actions: [
-          // IconButton(
-          //     onPressed: () =>
-          //         // Provider.of<FavoriteProvider>(context, listen: false)
-          //         //     .fetchData(),
-          //     icon: Icon(Icons.check))
-        ],
-      ),
+      appBar: AppBar(actions: [
+        IconButton(
+            onPressed: () {
+              print(Provider.of<FavoriteProvider>(context, listen: false)
+                  .favorites_anime
+                  .length);
+            },
+            icon: Icon(Icons.abc))
+      ]),
       backgroundColor: Colors.grey[900],
       body: FutureBuilder(
         builder: (context, snapshot) {
-          final favoritedata = Provider.of<FavoriteProvider>(context).favorites;
-          final animedata = Provider.of<AnimeProvider>(context).animes;
+          final favoritedata =
+              Provider.of<FavoriteProvider>(context, listen: false).favorites;
+          final animedata =
+              Provider.of<FavoriteProvider>(context, listen: false)
+                  .favorites_anime;
+          // final animedata = Provider.of<AnimeProvider>(context).animes;
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -48,10 +60,7 @@ class HomeScreen extends StatelessWidget {
                       favoritedata.contains(animedata[index].malId.toString())),
               itemCount: animedata.length);
         },
-        future: Future.wait([
-          Provider.of<AnimeProvider>(context).fetchData(),
-          Provider.of<FavoriteProvider>(context, listen: false).getDatabase(),
-        ]),
+        future: Provider.of<FavoriteProvider>(context).getDatabase(),
       ),
     );
   }
