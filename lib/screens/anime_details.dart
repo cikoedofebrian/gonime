@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gonime/models/card_arg.dart';
-import 'package:gonime/models/favorite.dart';
 import 'package:gonime/providers/anime_details_provider.dart';
 import 'package:gonime/providers/favorite_provider.dart';
-import 'package:gonime/utils/database.dart';
 import 'package:provider/provider.dart';
 
 class AnimeDetails extends StatefulWidget {
@@ -16,9 +13,9 @@ class AnimeDetails extends StatefulWidget {
 }
 
 class _AnimeDetailsState extends State<AnimeDetails> {
-  void _FavoriteToggler(CardArg arg) {
+  void _favoriteToggler() {
     setState(() {
-      arg.isfavorite = !arg.isfavorite;
+      widget.isfavorite = !widget.isfavorite;
     });
   }
 
@@ -141,11 +138,7 @@ class _AnimeDetailsState extends State<AnimeDetails> {
         onPressed: () {
           Provider.of<FavoriteProvider>(context, listen: false)
               .toggleFavorite(widget.id, !widget.isfavorite);
-          setState(() {
-            widget.isfavorite = !widget.isfavorite;
-          });
-
-          // _FavoriteToggler(widget);
+          _favoriteToggler();
         },
         child: Icon(
           !widget.isfavorite ? Icons.favorite_border : Icons.favorite,

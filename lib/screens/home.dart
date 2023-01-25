@@ -16,6 +16,13 @@ class HomeScreen extends StatelessWidget {
         title: const Text('GoNime'),
         centerTitle: true,
         backgroundColor: Colors.black,
+        actions: [
+          IconButton(
+              onPressed: () =>
+                  Provider.of<FavoriteProvider>(context, listen: false)
+                      .fetchData(),
+              icon: Icon(Icons.check))
+        ],
       ),
       backgroundColor: Colors.grey[900],
       body: FutureBuilder(

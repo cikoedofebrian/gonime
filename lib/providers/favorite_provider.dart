@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
 import '../utils/database.dart';
+import '../models/home_anime.dart';
+import 'package:dio/dio.dart';
 
 class FavoriteProvider extends ChangeNotifier {
   List<String> _favorites = [];
+  List<HomeAnime> _favorites_anime = [];
   List<String> get favorites {
     return _favorites;
+  }
+
+  void fetchData() async {
+    List<HomeAnime> templist = [];
+    final dio = Dio();
+    for (var item in _favorites) {
+      final url = "https://api.jikan.moe/v4/anime/$item";
+      final response = await dio.get(url);
+      // print(response.data);
+      final data = HomeAnime.fromJson(response.data);
+      templist.add(data);
+      Future.delayed(const Duration(milliseconds: 500));
+      // HomeAnime.fromJson(response.data);
+    }
+    _favorites_anime = templist;
+    notifyListeners();
   }
 
   Future<void> getDatabase() async {

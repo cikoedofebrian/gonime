@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gonime/models/card_arg.dart';
 import 'package:gonime/screens/anime_details.dart';
 
 class AnimeCard extends StatelessWidget {
