@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gonime/providers/favorite_provider.dart';
 import 'package:gonime/screens/anime_details.dart';
+import 'package:provider/provider.dart';
 
 class AnimeCard extends StatelessWidget {
   const AnimeCard(
@@ -37,11 +39,20 @@ class AnimeCard extends StatelessWidget {
                   ),
                 ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  favorite ? Icons.favorite : Icons.favorite_border,
-                  // color: Colors.red,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.black.withOpacity(0.5),
+                  child: IconButton(
+                    onPressed: () {
+                      Provider.of<FavoriteProvider>(context, listen: false)
+                          .toggleFavorite(id.toString(), !favorite);
+                    },
+                    icon: Icon(
+                      favorite ? Icons.favorite : Icons.favorite_border,
+                      // color: Colors.red,
+                    ),
+                  ),
                 ),
               ),
             ]),

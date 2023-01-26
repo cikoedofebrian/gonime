@@ -24,5 +24,17 @@ class AnimeProvider extends ChangeNotifier {
     }
     _animes = temp;
   }
+
+  List<HomeAnime> getByList(List<String> favorites) {
+    List<HomeAnime> list = [];
+    for (var item in favorites) {
+      final fav =
+          _animes.firstWhere((element) => element.malId.toString() == item);
+      list.add(fav);
+    }
+    print(list);
+    return list;
+    // notifyListeners();
+  }
   // print(userData.data['data']);
 }

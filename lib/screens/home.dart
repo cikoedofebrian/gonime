@@ -17,11 +17,10 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.black,
         actions: [
-          // IconButton(
-          //     onPressed: () =>
-          //         // Provider.of<FavoriteProvider>(context, listen: false)
-          //         //     .fetchData(),
-          //     icon: Icon(Icons.check))
+          IconButton(
+              onPressed: (() =>
+                  Navigator.pushNamed(context, '/favorite-screen')),
+              icon: const Icon(Icons.favorite))
         ],
       ),
       backgroundColor: Colors.grey[900],

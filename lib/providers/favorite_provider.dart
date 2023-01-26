@@ -23,17 +23,18 @@ class FavoriteProvider extends ChangeNotifier {
     final data = await database.query('favoritesanime');
     final mappeddata = data.map((e) => e['id'] as String).toList();
     _favorites = mappeddata;
-    List<HomeAnime> templist = [];
-    final dio = Dio();
-    for (var item in mappeddata) {
-      final url = "https://api.jikan.moe/v4/anime/$item";
-      final response = await dio.get(url);
-      // print(response.data["data"]);
-      final data = HomeAnime.fromJson(response.data["data"]);
-      templist.add(data);
-      Future.delayed(const Duration(milliseconds: 600));
-    }
-    _favorites_anime = templist;
+    // List<HomeAnime> templist = [];
+    // final dio = Dio();
+    // for (var item in mappeddata) {
+    //   print(item);
+    //   final url = "https://api.jikan.moe/v4/anime/$item";
+    //   final response = await dio.get(url);
+    //   // print(response.data["data"]);
+    //   final data = HomeAnime.fromJson(response.data["data"]);
+    //   templist.add(data);
+    //   Future.delayed(const Duration(milliseconds: 600));
+    // }
+    // _favorites_anime = templist;
     notifyListeners();
   }
 
