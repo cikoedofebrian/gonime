@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:gonime/providers/anime_details_provider.dart';
+import 'package:gonime/providers/anime_provider.dart';
 import 'package:gonime/providers/favorite_provider.dart';
 import 'package:provider/provider.dart';
 
 class AnimeDetails extends StatefulWidget {
-  AnimeDetails(
+  const AnimeDetails(
       {super.key,
       required this.id,
       required this.favorite,
       required this.title});
-  final id;
-  final title;
-  final favorite;
+  final String id;
+  final String title;
+  final bool favorite;
 
   @override
   State<AnimeDetails> createState() => _AnimeDetailsState();
@@ -24,7 +24,7 @@ class _AnimeDetailsState extends State<AnimeDetails> {
   @override
   void initState() {
     isfavorite = widget.favorite;
-    future = Provider.of<AnimeDProvider>(context, listen: false)
+    future = Provider.of<AnimeProvider>(context, listen: false)
         .fetchDetails(widget.id);
     super.initState();
   }

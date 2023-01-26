@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gonime/models/home_anime.dart';
 import '../models/anime.dart';
 import 'package:dio/dio.dart';
-import 'dart:convert';
 
 class AnimeProvider extends ChangeNotifier {
   List<HomeAnime> _animes = [];
@@ -33,7 +32,13 @@ class AnimeProvider extends ChangeNotifier {
       list.add(fav);
     }
     return list;
-    // notifyListeners();
   }
-  // print(userData.data['data']);
+
+  Future<AnimeModel> fetchDetails(String id) async {
+    final url = "https://api.jikan.moe/v4/anime/$id/full";
+    final response = await Dio().get(url);
+
+    final anime = AnimeModel.fromJson(response.data["data"]);
+    return anime;
+  }
 }

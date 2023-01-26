@@ -18,15 +18,15 @@ class AnimeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: ((context) => AnimeDetails(
-                    title: title,
-                    id: id.toString(),
-                    favorite: favorite,
-                  )))),
-      // onTap: () => Navigator.pushNamed(context, '/anime-details',
-      //     arguments: CardArg(id: id.toString(), isfavorite: favorite)),
+        context,
+        MaterialPageRoute(
+          builder: ((context) => AnimeDetails(
+                title: title,
+                id: id.toString(),
+                favorite: favorite,
+              )),
+        ),
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Column(children: [
@@ -51,7 +51,6 @@ class AnimeCard extends StatelessWidget {
                     },
                     icon: Icon(
                       favorite ? Icons.favorite : Icons.favorite_border,
-                      // color: Colors.red,
                     ),
                   ),
                 ),

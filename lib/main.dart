@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gonime/providers/anime_details_provider.dart';
 import 'package:gonime/providers/anime_provider.dart';
 import 'package:gonime/providers/favorite_provider.dart';
+import 'package:gonime/providers/search_provider.dart';
 import 'package:gonime/screens/search_screen.dart';
-import './widgets/favorite.dart';
+
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './screens/home.dart';
@@ -11,8 +11,8 @@ import './screens/home.dart';
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: ((context) => AnimeProvider())),
-    ChangeNotifierProvider(create: ((context) => AnimeDProvider())),
-    ChangeNotifierProvider(create: ((context) => FavoriteProvider()))
+    ChangeNotifierProvider(create: ((context) => FavoriteProvider())),
+    ChangeNotifierProvider(create: ((context) => SearchProvider()))
   ], child: const MyApp()));
 }
 

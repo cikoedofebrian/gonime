@@ -43,14 +43,20 @@ class _HomeState extends State<HomeScreen> {
         backgroundColor: Colors.black,
         title: const Text('GoNime'),
         actions: [
+          // IconButton(
+          //     onPressed: (() =>
+          //         Provider.of<AnimeProvider>(listen: false, context)
+          //             .searchData()),
+          //     icon: Icon(Icons.check)),
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: IconButton(
-                onPressed: () => Navigator.pushNamed(context, '/search-screen'),
-                icon: const Icon(
-                  Icons.search,
-                  size: 26,
-                )),
+              onPressed: () => Navigator.pushNamed(context, '/search-screen'),
+              icon: const Icon(
+                Icons.search,
+                size: 26,
+              ),
+            ),
           )
         ],
       ),
