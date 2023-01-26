@@ -4,35 +4,43 @@ import 'package:gonime/providers/favorite_provider.dart';
 import 'package:provider/provider.dart';
 
 class AnimeDetails extends StatefulWidget {
-  AnimeDetails({super.key, required this.id, required this.isfavorite});
+  AnimeDetails(
+      {super.key,
+      required this.id,
+      required this.favorite,
+      required this.title});
   final id;
-  bool isfavorite;
+  final title;
+  final favorite;
 
   @override
   State<AnimeDetails> createState() => _AnimeDetailsState();
 }
 
 class _AnimeDetailsState extends State<AnimeDetails> {
-  void _favoriteToggler() {
-    setState(() {
-      widget.isfavorite = !widget.isfavorite;
-    });
-  }
-
   late Future future;
+  late bool isfavorite;
 
   @override
   void initState() {
+    isfavorite = widget.favorite;
     future = Provider.of<AnimeDProvider>(context, listen: false)
         .fetchDetails(widget.id);
     super.initState();
+  }
+
+  void favoriteToggler() {
+    setState(() {
+      isfavorite = !isfavorite;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.check))],
+        title: Text(widget.title),
+        // actions: [IconButton(onPressed: () {}, icon: Icon(Icons.check))],
       ),
       body: FutureBuilder(
         future: future,
@@ -136,12 +144,14 @@ class _AnimeDetailsState extends State<AnimeDetails> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          setState(() {
+            isfavorite = !isfavorite;
+          });
           Provider.of<FavoriteProvider>(context, listen: false)
-              .toggleFavorite(widget.id, !widget.isfavorite);
-          _favoriteToggler();
+              .toggleFavorite(widget.id, !isfavorite);
         },
         child: Icon(
-          !widget.isfavorite ? Icons.favorite_border : Icons.favorite,
+          !isfavorite ? Icons.favorite_border : Icons.favorite,
           color: Colors.white,
         ),
       ),

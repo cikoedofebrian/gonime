@@ -21,8 +21,9 @@ class AnimeCard extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: ((context) => AnimeDetails(
+                    title: title,
                     id: id.toString(),
-                    isfavorite: favorite,
+                    favorite: favorite,
                   )))),
       // onTap: () => Navigator.pushNamed(context, '/anime-details',
       //     arguments: CardArg(id: id.toString(), isfavorite: favorite)),

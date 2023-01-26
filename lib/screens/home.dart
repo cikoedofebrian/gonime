@@ -46,7 +46,7 @@ class _HomeState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: IconButton(
-                onPressed: () {},
+                onPressed: () => Navigator.pushNamed(context, '/search-screen'),
                 icon: const Icon(
                   Icons.search,
                   size: 26,
