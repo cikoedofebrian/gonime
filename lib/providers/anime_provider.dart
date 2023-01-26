@@ -32,7 +32,6 @@ class AnimeProvider extends ChangeNotifier {
           _animes.firstWhere((element) => element.malId.toString() == item);
       list.add(fav);
     }
-    print(list);
     return list;
     // notifyListeners();
   }

@@ -1,56 +1,83 @@
 import 'package:flutter/material.dart';
-import 'package:gonime/models/favorite.dart';
-import 'package:gonime/providers/favorite_provider.dart';
-import 'package:gonime/utils/database.dart';
 import 'package:provider/provider.dart';
+import '../providers/favorite_provider.dart';
 import '../providers/anime_provider.dart';
-import '../widgets/anime_card.dart';
+import 'package:gonime/widgets/favorite.dart';
+import 'package:gonime/widgets/recommended.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeState();
+}
+
+class _HomeState extends State<HomeScreen> {
+  int _selectedPage = 0;
+  static const List<Widget> _page = [
+    Recommended(),
+    FavoriteScreen(),
+  ];
+
+  late Future data;
+  @override
+  void initState() {
+    super.initState();
+    data = Future.wait([
+      Provider.of<AnimeProvider>(context, listen: false).fetchData(),
+      Provider.of<FavoriteProvider>(context, listen: false).getDatabase(),
+    ]);
+  }
+
+  void _changePage(int index) {
+    setState(() {
+      _selectedPage = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('GoNime'),
         centerTitle: true,
         backgroundColor: Colors.black,
+        title: const Text('GoNime'),
         actions: [
-          IconButton(
-              onPressed: (() =>
-                  Navigator.pushNamed(context, '/favorite-screen')),
-              icon: const Icon(Icons.favorite))
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.search,
+                  size: 26,
+                )),
+          )
         ],
       ),
-      backgroundColor: Colors.grey[900],
       body: FutureBuilder(
-        builder: (context, snapshot) {
-          final favoritedata = Provider.of<FavoriteProvider>(context).favorites;
-          final animedata = Provider.of<AnimeProvider>(context).animes;
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          return GridView.builder(
-              padding: const EdgeInsets.all(15),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 2 / 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10),
-              itemBuilder: (context, index) => AnimeCard(
-                  id: animedata[index].malId,
-                  title: animedata[index].title,
-                  imageUrl: animedata[index].imageUrl,
-                  favorite:
-                      favoritedata.contains(animedata[index].malId.toString())),
-              itemCount: animedata.length);
-        },
-        future: Future.wait([
-          Provider.of<AnimeProvider>(context).fetchData(),
-          Provider.of<FavoriteProvider>(context, listen: false).getDatabase(),
-        ]),
+          future: data,
+          builder: (context, snapshot) =>
+              snapshot.connectionState == ConnectionState.waiting
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : _page[_selectedPage]),
+      bottomNavigationBar: SizedBox(
+        height: 70,
+        child: BottomNavigationBar(
+          backgroundColor: Colors.black,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.grey,
+          unselectedFontSize: 10,
+          selectedFontSize: 10,
+          currentIndex: _selectedPage,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.favorite), label: 'Favorite'),
+          ],
+          onTap: (value) => _changePage(value),
+        ),
       ),
     );
   }
