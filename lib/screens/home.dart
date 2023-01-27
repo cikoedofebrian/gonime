@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gonime/providers/search_provider.dart';
 import 'package:provider/provider.dart';
 import '../providers/favorite_provider.dart';
 import '../providers/anime_provider.dart';
@@ -48,16 +49,19 @@ class _HomeState extends State<HomeScreen> {
         backgroundColor: Colors.black,
         title: const Text('GoNime'),
         actions: [
-          IconButton(
-              onPressed: (() => print(
-                  Provider.of<FavoriteProvider>(listen: false, context)
-                      .favorites
-                      .length)),
-              icon: Icon(Icons.check)),
+          // IconButton(
+          //     onPressed: (() => print(
+          //         Provider.of<FavoriteProvider>(listen: false, context)
+          //             .favorites
+          //             .length)),
+          //     icon: Icon(Icons.check)),
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: IconButton(
-              onPressed: () => Navigator.pushNamed(context, '/search-screen'),
+              onPressed: () => Navigator.pushNamed(context, '/search-screen')
+                  .then((value) =>
+                      Provider.of<SearchProvider>(context, listen: false)
+                          .title_removed()),
               icon: const Icon(
                 Icons.search,
                 size: 26,

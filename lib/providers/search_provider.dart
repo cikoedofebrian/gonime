@@ -3,15 +3,20 @@ import 'package:gonime/models/home_anime.dart';
 import 'package:dio/dio.dart';
 
 class SearchProvider extends ChangeNotifier {
-  bool _isSearch = false;
-  bool get isSearch {
-    return _isSearch;
-  }
+  // bool _isSearch = false;
+  // bool get isSearch {
+  //   return _isSearch;
+  // }
 
   String _title = '';
-  // set title(String title) {
-  //   _title = title;
-  // }
+  String get title {
+    return _title;
+  }
+
+  void title_removed() {
+    _searchList = [];
+    _title = '';
+  }
 
   List<HomeAnime> _searchList = [];
   List<HomeAnime> get searchList {
@@ -20,7 +25,6 @@ class SearchProvider extends ChangeNotifier {
 
   void TriggerSearch(String title) {
     _title = title;
-    _isSearch = !_isSearch;
     notifyListeners();
   }
 
@@ -32,6 +36,5 @@ class SearchProvider extends ChangeNotifier {
       list.add(HomeAnime.fromJson(item));
     }
     _searchList = list;
-    _isSearch = false;
   }
 }

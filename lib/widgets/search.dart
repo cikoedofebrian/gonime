@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gonime/providers/favorite_provider.dart';
 import 'package:gonime/providers/search_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,20 @@ class _SearchFormState extends State<SearchForm> {
   String _searchInput = '';
   bool _isFilled = false;
   final textController = TextEditingController();
+  void searchSubmit() {
+    if (textController.text.isNotEmpty) {
+      if (textController.text !=
+          Provider.of<SearchProvider>(context, listen: false).title) {
+        FocusScope.of(context).requestFocus(FocusNode());
+        Provider.of<SearchProvider>(context, listen: false)
+            .TriggerSearch(textController.text);
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Ur Search is Empty')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,6 +62,7 @@ class _SearchFormState extends State<SearchForm> {
                   _searchInput = value;
                 },
                 controller: textController,
+                onSubmitted: (_) => searchSubmit(),
                 decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintStyle: TextStyle(fontSize: 12),
@@ -55,16 +71,7 @@ class _SearchFormState extends State<SearchForm> {
             ),
           ),
           GestureDetector(
-            onTap: () {
-              if (textController.text.isNotEmpty) {
-                FocusScope.of(context).requestFocus(FocusNode());
-                Provider.of<SearchProvider>(context, listen: false)
-                    .TriggerSearch(textController.text);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Ur Search is Empty')));
-              }
-            },
+            onTap: () => searchSubmit(),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
