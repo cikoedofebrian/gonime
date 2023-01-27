@@ -30,5 +30,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="flutter_native_splash.SplashScreen.IsRounded"
+            android:value="false" />
     </application>
 </manifest>

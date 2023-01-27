@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:gonime/providers/anime_provider.dart';
 import 'package:gonime/providers/favorite_provider.dart';
 import 'package:gonime/providers/search_provider.dart';
@@ -9,6 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 import './screens/home.dart';
 
 void main() {
+  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: ((context) => AnimeProvider())),
     ChangeNotifierProvider(create: ((context) => FavoriteProvider())),
@@ -16,10 +19,17 @@ void main() {
   ], child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+// Future<void> initialize() async {
+//   await Future.delayed(const Duration(seconds: 2));
+// }
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

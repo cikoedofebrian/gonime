@@ -23,8 +23,8 @@ class _SearchFormState extends State<SearchForm> {
             .TriggerSearch(textController.text);
       }
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Ur Search is Empty')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please input some text.')));
     }
   }
 
@@ -38,47 +38,51 @@ class _SearchFormState extends State<SearchForm> {
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(left: 10),
-            child: Icon(
+            margin: const EdgeInsets.only(left: 10),
+            child: const Icon(
               Icons.search,
               size: 20,
             ),
           ),
           Expanded(
             child: Container(
-              margin: const EdgeInsets.only(left: 15),
-              height: 25,
-              child: TextField(
-                onChanged: (value) {
-                  if (value.isNotEmpty && _searchInput.isEmpty) {
-                    setState(() {
-                      _isFilled = true;
-                    });
-                  } else if (value.isEmpty && _searchInput.isNotEmpty) {
-                    setState(() {
-                      _isFilled = false;
-                    });
-                  }
-                  _searchInput = value;
-                },
-                controller: textController,
-                onSubmitted: (_) => searchSubmit(),
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(fontSize: 12),
-                    hintText: 'Search something...'),
+              margin: const EdgeInsets.only(left: 10, right: 10),
+              height: 45,
+              child: SingleChildScrollView(
+                child: TextField(
+                  onChanged: (value) {
+                    if (value.isNotEmpty && _searchInput.isEmpty) {
+                      setState(() {
+                        _isFilled = true;
+                      });
+                    } else if (value.isEmpty && _searchInput.isNotEmpty) {
+                      setState(() {
+                        _isFilled = false;
+                      });
+                    }
+                    _searchInput = value;
+                  },
+                  controller: textController,
+                  maxLines: 1,
+                  // minLines: 1,
+                  onSubmitted: (_) => searchSubmit(),
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(fontSize: 12),
+                      hintText: 'Search something...'),
+                ),
               ),
             ),
           ),
           GestureDetector(
             onTap: () => searchSubmit(),
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.black,
               ),
-              child: Text(
+              child: const Text(
                 'Search',
                 style: TextStyle(color: Colors.white),
               ),
@@ -93,8 +97,8 @@ class _SearchFormState extends State<SearchForm> {
                 textController.text = '';
               },
               child: Container(
-                margin: EdgeInsets.only(left: 10),
-                child: Icon(
+                margin: const EdgeInsets.only(left: 10),
+                child: const Icon(
                   Icons.cancel_outlined,
                 ),
               ),

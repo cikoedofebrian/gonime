@@ -4,15 +4,12 @@ import '../screens/anime_details.dart';
 class SearchCard extends StatelessWidget {
   const SearchCard({
     super.key,
-    // required this.length,
-
     required this.title,
     required this.imageUrl,
     required this.id,
   });
 
   final String title;
-  // final int length;
   final int id;
   final String imageUrl;
 
@@ -25,11 +22,9 @@ class SearchCard extends StatelessWidget {
           builder: ((context) => AnimeDetails(
                 title: title,
                 id: id.toString(),
-                // favorite: false,
               )),
         ),
       ),
-      // onTap: () => print(id),
       child: Column(
         children: [
           Container(
@@ -38,7 +33,7 @@ class SearchCard extends StatelessWidget {
             width: double.infinity,
             child: Row(
               children: [
-                Container(
+                SizedBox(
                   width: 150,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),

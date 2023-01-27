@@ -11,12 +11,6 @@ class SearchList extends StatefulWidget {
 }
 
 class _SearchListState extends State<SearchList> {
-  // late final future;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   future = Provider.of<SearchProvider>(context, listen: false).searchData();
-  // }
   String title = '';
 
   @override
@@ -32,7 +26,7 @@ class _SearchListState extends State<SearchList> {
           }
 
           if (search.searchList.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('Nothing found.'),
             );
           }
