@@ -11,8 +11,8 @@ class HomeAnime {
 
   factory HomeAnime.fromJson(Map<String, dynamic> data) {
     return HomeAnime(
-        imageUrl: data['images']['jpg']['image_url'],
-        malId: data['mal_id'],
-        title: data['title']);
+        imageUrl: data['images']['jpg']['image_url'] ?? '',
+        malId: data['mal_id'] ?? '',
+        title: data['title'] ?? '');
   }
 }

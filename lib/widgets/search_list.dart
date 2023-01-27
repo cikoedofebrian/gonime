@@ -24,9 +24,7 @@ class SearchList extends StatelessWidget {
                       Expanded(
                         child: ListView.builder(
                             itemBuilder: ((context, index) => SearchCard(
-                                rating: 4,
                                 title: search.searchList[index].title,
-                                year: '2004',
                                 imageUrl: search.searchList[index].imageUrl,
                                 id: search.searchList[index].malId)),
                             itemCount: search.searchList.length),

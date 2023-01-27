@@ -32,7 +32,6 @@ class AnimeModel {
     this.rank = 0,
     this.airingDate = '',
     this.genres = const [],
-    this.genreId = 1,
   });
 
   factory AnimeModel.fromJson(Map<String, dynamic> json) {
@@ -60,7 +59,6 @@ class AnimeModel {
       rank: json['rank'] ?? 0,
       airingDate: json['aired']['string'] ?? '',
       genres: tempGenresList,
-      genreId: json['genres'][0]['mal_id'],
     );
   }
 }

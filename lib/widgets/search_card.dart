@@ -5,17 +5,14 @@ class SearchCard extends StatelessWidget {
   const SearchCard({
     super.key,
     // required this.length,
-    required this.rating,
+
     required this.title,
-    required this.year,
     required this.imageUrl,
     required this.id,
   });
 
   final String title;
   // final int length;
-  final double rating;
-  final String year;
   final int id;
   final String imageUrl;
 
@@ -28,10 +25,11 @@ class SearchCard extends StatelessWidget {
           builder: ((context) => AnimeDetails(
                 title: title,
                 id: id.toString(),
-                favorite: false,
+                // favorite: false,
               )),
         ),
       ),
+      // onTap: () => print(id),
       child: Column(
         children: [
           Container(

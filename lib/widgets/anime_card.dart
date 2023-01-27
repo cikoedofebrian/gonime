@@ -23,7 +23,7 @@ class AnimeCard extends StatelessWidget {
           builder: ((context) => AnimeDetails(
                 title: title,
                 id: id.toString(),
-                favorite: favorite,
+                // favorite: favorite,
               )),
         ),
       ),

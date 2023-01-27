@@ -7,11 +7,11 @@ class AnimeDetails extends StatefulWidget {
   const AnimeDetails(
       {super.key,
       required this.id,
-      required this.favorite,
+      // required this.favorite,
       required this.title});
   final String id;
   final String title;
-  final bool favorite;
+  // final bool favorite;
 
   @override
   State<AnimeDetails> createState() => _AnimeDetailsState();
@@ -23,7 +23,9 @@ class _AnimeDetailsState extends State<AnimeDetails> {
 
   @override
   void initState() {
-    isfavorite = widget.favorite;
+    isfavorite = Provider.of<FavoriteProvider>(context, listen: false)
+        .favorites
+        .contains(widget.id);
     future = Provider.of<AnimeProvider>(context, listen: false)
         .fetchDetails(widget.id);
     super.initState();
@@ -144,11 +146,11 @@ class _AnimeDetailsState extends State<AnimeDetails> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Provider.of<FavoriteProvider>(context, listen: false)
+              .toggleFavorite(widget.id, !isfavorite);
           setState(() {
             isfavorite = !isfavorite;
           });
-          Provider.of<FavoriteProvider>(context, listen: false)
-              .toggleFavorite(widget.id, !isfavorite);
         },
         child: Icon(
           !isfavorite ? Icons.favorite_border : Icons.favorite,

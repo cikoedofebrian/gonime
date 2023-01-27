@@ -18,14 +18,19 @@ class _HomeState extends State<HomeScreen> {
     Recommended(),
     FavoriteScreen(),
   ];
-
   late Future data;
   @override
   void initState() {
     super.initState();
     data = Future.wait([
+      Provider.of<FavoriteProvider>(context, listen: false)
+          .getDatabase()
+          .whenComplete(
+            () => Provider.of<FavoriteProvider>(context, listen: false)
+                .getByList(Provider.of<FavoriteProvider>(context, listen: false)
+                    .favorites),
+          ),
       Provider.of<AnimeProvider>(context, listen: false).fetchData(),
-      Provider.of<FavoriteProvider>(context, listen: false).getDatabase(),
     ]);
   }
 
@@ -43,11 +48,12 @@ class _HomeState extends State<HomeScreen> {
         backgroundColor: Colors.black,
         title: const Text('GoNime'),
         actions: [
-          // IconButton(
-          //     onPressed: (() =>
-          //         Provider.of<AnimeProvider>(listen: false, context)
-          //             .searchData()),
-          //     icon: Icon(Icons.check)),
+          IconButton(
+              onPressed: (() => print(
+                  Provider.of<FavoriteProvider>(listen: false, context)
+                      .favorites
+                      .length)),
+              icon: Icon(Icons.check)),
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: IconButton(

@@ -14,9 +14,8 @@ class FavoriteScreen extends StatefulWidget {
 class _FavoriteScreenState extends State<FavoriteScreen> {
   @override
   Widget build(BuildContext context) {
-    final favoritedata = Provider.of<FavoriteProvider>(context);
-    final animedata =
-        Provider.of<AnimeProvider>(context).getByList(favoritedata.favorites);
+    final animedata = Provider.of<FavoriteProvider>(context).fav_anime;
+    final favoritedata = Provider.of<FavoriteProvider>(context).favorites;
     return GridView.builder(
         padding: const EdgeInsets.all(15),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -28,7 +27,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             id: animedata[index].malId,
             title: animedata[index].title,
             imageUrl: animedata[index].imageUrl,
-            favorite: true),
+            favorite: favoritedata.contains(animedata[index].malId.toString())),
         itemCount: animedata.length);
   }
 }

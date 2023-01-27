@@ -57,6 +57,7 @@ class _SearchFormState extends State<SearchForm> {
           GestureDetector(
             onTap: () {
               if (textController.text.isNotEmpty) {
+                FocusScope.of(context).requestFocus(FocusNode());
                 Provider.of<SearchProvider>(context, listen: false)
                     .TriggerSearch(textController.text);
               } else {
