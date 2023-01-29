@@ -3,6 +3,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:gonime/providers/anime_provider.dart';
 import 'package:gonime/providers/favorite_provider.dart';
 import 'package:gonime/providers/search_provider.dart';
+import 'package:gonime/screens/auth_screen.dart';
 import 'package:gonime/screens/search_screen.dart';
 
 import 'package:provider/provider.dart';
@@ -38,7 +39,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch()
             .copyWith(primary: Colors.black, secondary: Colors.grey[900]),
-        fontFamily: GoogleFonts.montserrat().fontFamily,
+        fontFamily: GoogleFonts.josefinSans().fontFamily,
       ),
       home: const HomeScreen(),
       routes: {

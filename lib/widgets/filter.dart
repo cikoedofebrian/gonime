@@ -19,7 +19,7 @@ class _FilterState extends State<Filter> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
+      height: 55,
       decoration: BoxDecoration(
           color: Colors.white,
           border: Border.symmetric(
@@ -30,11 +30,11 @@ class _FilterState extends State<Filter> {
         scrollDirection: Axis.horizontal,
         // padding: EdgeInsets.symmetric(vertical: 5),
         itemBuilder: ((context, index) => Container(
-              height: 20,
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               margin: EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(7),
                 color: Colors.black,
               ),
               child: Text(

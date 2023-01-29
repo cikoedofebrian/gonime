@@ -13,12 +13,6 @@ class AnimeProvider extends ChangeNotifier {
     return _animes;
   }
 
-  // List<HomeAnime> _fav_anime = [];
-
-  // List<HomeAnime> get fav_anime {
-  //   return _fav_anime;
-  // }
-
   Future<void> fetchData() async {
     List<HomeAnime> temp = [];
     const url = "https://api.jikan.moe/v4/recommendations/anime";
@@ -31,18 +25,6 @@ class AnimeProvider extends ChangeNotifier {
     }
     _animes = temp;
   }
-
-  // Future<void> getByList(List<String> favorites) async {
-  //   List<HomeAnime> list = [];
-  //   for (var item in favorites) {
-  //     String url = "https://api.jikan.moe/v4/anime/$item";
-  //     final response = await http.get(Uri.parse(url));
-  //     final converted = HomeAnime.fromJson(jsonDecode(response.body)['data']);
-  //     list.add(converted);
-  //   }
-  //   _fav_anime = list;
-  //   notifyListeners();
-  // }
 
   Future<AnimeModel> fetchDetails(String id) async {
     final url = "https://api.jikan.moe/v4/anime/$id/full";
