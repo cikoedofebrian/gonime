@@ -18,7 +18,7 @@ class FavoriteProvider extends ChangeNotifier {
   List<HomeAnime> _fav_anime = [];
 
   List<HomeAnime> get fav_anime {
-    return _fav_anime;
+    return _fav_anime.reversed.toList();
   }
 
   // Future<void> fetchData() async {

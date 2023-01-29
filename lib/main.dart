@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:gonime/providers/anime_provider.dart';
 import 'package:gonime/providers/favorite_provider.dart';
 import 'package:gonime/providers/search_provider.dart';
 import 'package:gonime/screens/login.dart';
 import 'package:gonime/screens/search_screen.dart';
 import 'package:gonime/screens/sign_up.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './screens/home.dart';
 
-void main() {
-  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: ((context) => AnimeProvider())),

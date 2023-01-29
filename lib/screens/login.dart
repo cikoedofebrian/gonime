@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gonime/screens/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
@@ -17,7 +18,7 @@ class AuthScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: Icon(
-                    Icons.supervised_user_circle,
+                    Icons.account_circle_rounded,
                     size: 100,
                   ),
                 ),
@@ -56,6 +57,7 @@ class AuthScreen extends StatelessWidget {
                           color: Colors.white,
                         ),
                         child: TextField(
+                          textAlignVertical: TextAlignVertical.center,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             suffixIcon: Icon(Icons.email),
@@ -72,14 +74,17 @@ class AuthScreen extends StatelessWidget {
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 15),
+                        // alignment: Alignment.center,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                         ),
                         child: TextField(
+                          textAlignVertical: TextAlignVertical.center,
+                          obscureText: true,
                           decoration: InputDecoration(
                               border: InputBorder.none,
-                              suffixIcon: Icon(Icons.key)),
+                              suffixIcon: Icon(Icons.lock)),
                         ),
                       ),
                     ],
@@ -101,6 +106,9 @@ class AuthScreen extends StatelessWidget {
                         builder: (context) => HomeScreen(),
                       ),
                     );
+                    FirebaseAuth.instance.createUserWithEmailAndPassword(
+                        email: "ciko.edo.febrians@gmail.com",
+                        password: "affaiyah");
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 10),
@@ -123,12 +131,12 @@ class AuthScreen extends StatelessWidget {
                     children: [
                       Text('Dont have account?'),
                       GestureDetector(
-                          onTap: () =>
-                              Navigator.pushNamed(context, '/register'),
-                          child: Text(
-                            ' Create account',
-                            style: TextStyle(color: Colors.grey),
-                          ))
+                        onTap: () => Navigator.pushNamed(context, '/register'),
+                        child: Text(
+                          ' Create account',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
                     ],
                   ),
                 )
