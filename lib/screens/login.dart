@@ -7,7 +7,7 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
+      // backgroundColor: Colos.white,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 50),
         child: Center(
@@ -116,16 +116,21 @@ class AuthScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Dont have account?'),
-                    GestureDetector(
-                        child: Text(
-                      'Create account',
-                      style: TextStyle(color: Colors.grey),
-                    ))
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Dont have account?'),
+                      GestureDetector(
+                          onTap: () =>
+                              Navigator.pushNamed(context, '/register'),
+                          child: Text(
+                            ' Create account',
+                            style: TextStyle(color: Colors.grey),
+                          ))
+                    ],
+                  ),
                 )
               ],
               mainAxisAlignment: MainAxisAlignment.center,
