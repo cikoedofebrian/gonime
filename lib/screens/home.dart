@@ -46,6 +46,14 @@ class _HomeState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: _selectedPage == 1
+            ? FloatingActionButton(
+                backgroundColor: Colors.red,
+                onPressed: Provider.of<FavoriteProvider>(context, listen: false)
+                    .reverseList,
+                child: Icon(Icons.sort),
+              )
+            : null,
         drawer: AppDrawer(),
         appBar: AppBar(
           centerTitle: true,

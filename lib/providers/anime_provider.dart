@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gonime/models/home_anime.dart';
 import '../models/anime.dart';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
-import 'dart:convert';
 
 class AnimeProvider extends ChangeNotifier {
   List<HomeAnime> _animes = [];

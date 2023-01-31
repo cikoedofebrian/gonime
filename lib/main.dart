@@ -13,7 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import './screens/home.dart';
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(MultiProvider(providers: [
