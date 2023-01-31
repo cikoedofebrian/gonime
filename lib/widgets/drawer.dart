@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -21,8 +22,7 @@ class AppDrawer extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () => Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => AuthScreen())),
+          onTap: () => FirebaseAuth.instance.signOut(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
             child: Row(

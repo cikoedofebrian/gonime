@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:gonime/providers/anime_provider.dart';
@@ -43,10 +44,20 @@ class _MyAppState extends State<MyApp> {
             .copyWith(primary: Colors.black, secondary: Colors.grey[900]),
         fontFamily: GoogleFonts.josefinSans().fontFamily,
       ),
-      home: const AuthScreen(),
+      home: StreamBuilder(
+          builder: ((context, snapshot) {
+            // if (snapshot.connectionState == ConnectionState.active) {
+            //   return CircularProgressIndicator();
+            // }
+            if (snapshot.hasData) {
+              return HomeScreen();
+            }
+            return AuthScreen();
+          }),
+          stream: FirebaseAuth.instance.authStateChanges()),
       routes: {
         '/search-screen': (context) => const SearchScreen(),
-        '/register': (context) => const RegisterScreen()
+        '/register': (context) => RegisterScreen()
       },
     );
   }

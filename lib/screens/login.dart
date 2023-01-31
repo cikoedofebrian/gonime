@@ -1,16 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:gonime/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import '../extensions/email_validator.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+
+    String email = '';
+    String password = '';
+
+    void _submit() async {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        try {
+          await FirebaseAuth.instance
+              .signInWithEmailAndPassword(email: email, password: password);
+        } on FirebaseAuthException catch (e) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(e.message!)));
+        }
+      }
+    }
+
     return Scaffold(
       // backgroundColor: Colos.white,
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 50),
+        padding: const EdgeInsets.symmetric(horizontal: 50),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -40,6 +60,7 @@ class AuthScreen extends StatelessWidget {
                   height: 40,
                 ),
                 Form(
+                  key: _formKey,
                   child: Column(
                     children: [
                       Container(
@@ -56,7 +77,18 @@ class AuthScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                         ),
-                        child: TextField(
+                        child: TextFormField(
+                          validator: (value) {
+                            if (!value!.isValidEmail()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          'Please give a valid email address')));
+                              return;
+                            }
+                            ;
+                          },
+                          onSaved: (newValue) => email = newValue ?? '',
                           textAlignVertical: TextAlignVertical.center,
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -79,7 +111,15 @@ class AuthScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                         ),
-                        child: TextField(
+                        child: TextFormField(
+                          onSaved: (newValue) => password = newValue ?? '',
+                          validator: (value) {
+                            if (value!.length < 7) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      'Password need a minimum length of 7')));
+                            }
+                          },
                           textAlignVertical: TextAlignVertical.center,
                           obscureText: true,
                           decoration: InputDecoration(
@@ -100,16 +140,7 @@ class AuthScreen extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
-                      ),
-                    );
-                    FirebaseAuth.instance.createUserWithEmailAndPassword(
-                        email: "ciko.edo.febrians@gmail.com",
-                        password: "affaiyah");
-                  },
+                  onTap: _submit,
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 10),
                     width: double.infinity,
