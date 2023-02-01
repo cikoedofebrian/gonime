@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:gonime/providers/auth.dart';
 import 'package:gonime/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +29,16 @@ class AuthScreen extends StatelessWidget {
         }
       }
     }
+
+    // void tryRethrow() async {
+    //   // try {
+    //   await Provider.of<AuthProvider>(context, listen: false)
+    //       .SignUp()
+    //       .onError((error, stackTrace) => print('sss'));
+    //   // } catch (error) {
+    //   //   print('test');
+    //   // }
+    // }
 
     return Scaffold(
       // backgroundColor: Colos.white,

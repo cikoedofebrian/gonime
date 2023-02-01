@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:gonime/providers/anime_provider.dart';
+import 'package:gonime/providers/auth.dart';
 import 'package:gonime/providers/favorite_provider.dart';
 import 'package:gonime/providers/search_provider.dart';
 import 'package:gonime/screens/login.dart';
@@ -17,6 +18,7 @@ void main() async {
   await Firebase.initializeApp();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: ((context) => AuthProvider())),
     ChangeNotifierProvider(create: ((context) => AnimeProvider())),
     ChangeNotifierProvider(create: ((context) => FavoriteProvider())),
     ChangeNotifierProvider(create: ((context) => SearchProvider()))
