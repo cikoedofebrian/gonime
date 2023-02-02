@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gonime/screens/home.dart';
@@ -25,8 +26,15 @@ class RegisterScreen extends StatelessWidget {
           return;
         }
         try {
+          String user = '';
           await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(email: email, password: password);
+              .createUserWithEmailAndPassword(email: email, password: password)
+              .then((value) => user = value.user!.uid);
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user)
+              .set({'email': email, 'password': password});
+          print(user);
           Navigator.pop(context);
         } on FirebaseAuthException catch (e) {
           ScaffoldMessenger.of(context)

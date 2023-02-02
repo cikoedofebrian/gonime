@@ -39,7 +39,7 @@ class _AppDrawerState extends State<AppDrawer> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onTap: _pickImage,
+                onTap: () => Navigator.of(context).pushNamed('/profile'),
                 child: CircleAvatar(
                   radius: 40,
                   child: Icon(Icons.supervised_user_circle_sharp),

@@ -6,6 +6,7 @@ import 'package:gonime/providers/auth.dart';
 import 'package:gonime/providers/favorite_provider.dart';
 import 'package:gonime/providers/search_provider.dart';
 import 'package:gonime/screens/login.dart';
+import 'package:gonime/screens/profile.dart';
 import 'package:gonime/screens/search_screen.dart';
 import 'package:gonime/screens/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -59,7 +60,8 @@ class _MyAppState extends State<MyApp> {
           stream: FirebaseAuth.instance.authStateChanges()),
       routes: {
         '/search-screen': (context) => const SearchScreen(),
-        '/register': (context) => RegisterScreen()
+        '/register': (context) => RegisterScreen(),
+        '/profile': ((context) => Profile())
       },
     );
   }
