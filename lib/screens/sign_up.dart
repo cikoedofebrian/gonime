@@ -12,6 +12,7 @@ class RegisterScreen extends StatelessWidget {
 
   String email = '';
   String password = '';
+  String name = '';
   String c_password = '';
 
   @override
@@ -27,18 +28,17 @@ class RegisterScreen extends StatelessWidget {
         }
         try {
           String user = '';
+          print(email);
           await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password)
               .then((value) => user = value.user!.uid);
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user)
-              .set({'email': email, 'password': password});
+          await FirebaseFirestore.instance.collection('users').doc(user).set(
+              {'email': email.trim(), 'name': name, 'bio': '', 'imageUrl': ''});
           print(user);
           Navigator.pop(context);
         } on FirebaseAuthException catch (e) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(e.message!)));
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(e.message! + ' (firebase error)')));
         }
       }
     }
@@ -104,6 +104,37 @@ class RegisterScreen extends StatelessWidget {
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   suffixIcon: Icon(Icons.email),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(15),
+                              width: double.infinity,
+                              child: Text(
+                                'NAME',
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content:
+                                                Text('Please give a name')));
+                                  }
+                                },
+                                onSaved: (newValue) => name = newValue ?? '',
+                                textAlignVertical: TextAlignVertical.center,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  suffixIcon: Icon(Icons.person),
                                 ),
                               ),
                             ),
