@@ -25,7 +25,7 @@ class AnimeProvider extends ChangeNotifier {
     _animes = temp;
   }
 
-  Future<void> getTop() async {
+  Future<List<HomeAnime>> getTop() async {
     List<HomeAnime> temp = [];
     const url = "$JIKAN_URL/top/anime";
     Response userData = await _dio.get(url);
@@ -33,8 +33,7 @@ class AnimeProvider extends ChangeNotifier {
       HomeAnime animedata = HomeAnime.fromJson(anime);
       temp.add(animedata);
     }
-    _animes = temp;
-    notifyListeners();
+    return temp;
   }
 
   Future<AnimeModel> fetchDetails(String id) async {

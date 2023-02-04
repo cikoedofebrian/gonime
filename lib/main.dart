@@ -10,6 +10,7 @@ import 'package:gonime/screens/profile.dart';
 import 'package:gonime/screens/search_screen.dart';
 import 'package:gonime/screens/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:gonime/screens/top_anime.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './screens/home.dart';
@@ -61,7 +62,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/search-screen': (context) => const SearchScreen(),
         '/register': (context) => RegisterScreen(),
-        '/profile': ((context) => Profile())
+        '/profile': ((context) => Profile()),
+        '/top-anime': ((context) => TopAnime())
       },
     );
   }

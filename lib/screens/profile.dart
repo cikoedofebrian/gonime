@@ -3,8 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
 
 enum EditStatus { Edit, Save }
@@ -37,10 +35,10 @@ class _ProfileState extends State<Profile> {
 
   void saveChanges(email, name, bio) async {
     final _firestore = FirebaseFirestore.instance.collection('users').doc(user);
-    if (image != null) {
+    if (_image != null) {
       final _reference =
           FirebaseStorage.instance.ref('profile_image/$user.jpg');
-      final uploadTask = await _reference.putFile(image!);
+      await _reference.putFile(_image!);
       final String imageurl = await _reference.getDownloadURL();
       await _firestore.set(
           {'email': email, 'name': name, 'bio': bio, 'imageurl': imageurl});
@@ -51,18 +49,46 @@ class _ProfileState extends State<Profile> {
   }
 
   void _pickImage() async {
-    final XFile? picker =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (picker == null) {
+    final picker = ImagePicker();
+    final ImageSource? image = await showDialog<ImageSource>(
+        context: context,
+        builder: (context) => SimpleDialog(
+              title: const Text('Choose source'),
+              children: <Widget>[
+                SimpleDialogOption(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [Text('Camera'), Icon(Icons.camera)],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                  ),
+                  onPressed: () => Navigator.pop(context, ImageSource.camera),
+                ),
+                SimpleDialogOption(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [Text('Gallery'), Icon(Icons.photo)],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                  ),
+                  onPressed: () => Navigator.pop(context, ImageSource.gallery),
+                ),
+              ],
+            ));
+    // await picker.pickImage(source: ImageSource.camera);
+    if (image == null) {
       return;
     }
+    final pickedImage = await picker.pickImage(source: image);
     setState(() {
-      image = File(picker.path);
+      _image = File(pickedImage!.path);
     });
   }
 
   final user = FirebaseAuth.instance.currentUser!.uid;
-  File? image;
+  File? _image;
   String? _imageurl;
   String email = '';
   String name = '';
@@ -104,7 +130,7 @@ class _ProfileState extends State<Profile> {
                           child: Form(
                               child: Column(
                             children: [
-                              if (_imageurl!.isEmpty && image == null)
+                              if (_imageurl!.isEmpty && _image == null)
                                 TextButton.icon(
                                     onPressed: () {
                                       _pickImage();
@@ -114,14 +140,14 @@ class _ProfileState extends State<Profile> {
                                     },
                                     icon: Icon(Icons.camera),
                                     label: Text('Add photo')),
-                              if (_imageurl!.isNotEmpty || image != null)
+                              if (_imageurl!.isNotEmpty || _image != null)
                                 GestureDetector(
                                   onTap: status == EditStatus.Save
                                       ? _pickImage
                                       : null,
                                   child: CircleAvatar(
-                                    backgroundImage: image != null
-                                        ? FileImage(image!)
+                                    backgroundImage: _image != null
+                                        ? FileImage(_image!)
                                         : NetworkImage(_imageurl!)
                                             as ImageProvider,
                                     radius: 50,

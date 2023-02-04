@@ -82,8 +82,11 @@ class _AppDrawerState extends State<AppDrawer> {
         Divider(
           height: 0,
         ),
-        GestureDetector(
-          onTap: () => FirebaseAuth.instance.signOut(),
+        InkWell(
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.pushNamed(context, '/top-anime');
+          },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
             child: Row(
