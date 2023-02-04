@@ -1,10 +1,13 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:image_picker/image_picker.dart';
 
-enum EditStatus { Edit, onEdit, Save }
+enum EditStatus { Edit, Save }
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -21,120 +24,198 @@ class _ProfileState extends State<Profile> {
     super.initState();
   }
 
+  void editFunction() {
+    setState(() {
+      if (status == EditStatus.Edit) {
+        status = EditStatus.Save;
+      } else {
+        status = EditStatus.Edit;
+        saveChanges(email, name, bio);
+      }
+    });
+  }
+
+  void saveChanges(email, name, bio) async {
+    final _firestore = FirebaseFirestore.instance.collection('users').doc(user);
+    if (image != null) {
+      final _reference =
+          FirebaseStorage.instance.ref('profile_image/$user.jpg');
+      final uploadTask = await _reference.putFile(image!);
+      final String imageurl = await _reference.getDownloadURL();
+      await _firestore.set(
+          {'email': email, 'name': name, 'bio': bio, 'imageurl': imageurl});
+      return;
+    }
+    await _firestore
+        .set({'email': email, 'name': name, 'bio': bio, 'imageurl': _imageurl});
+  }
+
+  void _pickImage() async {
+    final XFile? picker =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (picker == null) {
+      return;
+    }
+    setState(() {
+      image = File(picker.path);
+    });
+  }
+
   final user = FirebaseAuth.instance.currentUser!.uid;
+  File? image;
+  String? _imageurl;
+  String email = '';
+  String name = '';
+  String bio = '';
   late Future future;
   EditStatus status = EditStatus.Edit;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: future,
-        builder: (context, snapshot) => SafeArea(
-              child: Scaffold(
-                backgroundColor: Colors.black,
-                body: snapshot.connectionState == ConnectionState.waiting
-                    ? CircularProgressIndicator(color: Colors.white)
-                    : Stack(children: [
+    return SafeArea(
+        child: Scaffold(
+      backgroundColor: Colors.black,
+      body: FutureBuilder(
+          future: future,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                  child: CircularProgressIndicator(color: Colors.white));
+            }
+            name = snapshot.data!['name'];
+            email = snapshot.data!['email'];
+            bio = snapshot.data!['bio'];
+            _imageurl = snapshot.data!['imageurl'];
+
+            return Stack(children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 40),
+                alignment: Alignment.center,
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
                         Container(
-                          margin: EdgeInsets.all(50),
-                          alignment: Alignment.center,
-                          child: Center(
-                            child: SingleChildScrollView(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20)),
+                          padding: EdgeInsets.all(35),
+                          child: Form(
                               child: Column(
-                                // crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CircleAvatar(
-                                    child: Icon(Icons.account_circle_rounded),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    padding: EdgeInsets.all(50),
-                                    child: Form(
-                                        child: Column(
-                                      children: [
-                                        Container(
-                                          child: Text('Email'),
-                                          width: double.infinity,
-                                        ),
-                                        TextFormField(
-                                          initialValue: snapshot.data!['email'],
-                                          enabled: false,
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Container(
-                                          child: Text('Name'),
-                                          width: double.infinity,
-                                        ),
-                                        TextFormField(
-                                          initialValue: snapshot.data!['name'],
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Container(
-                                          child: Text('Bio'),
-                                          width: double.infinity,
-                                        ),
-                                        TextFormField(
-                                          maxLength: 10,
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                      ],
-                                    )),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        // SizedBox(
-                        //   height: 100,
-                        Container(
-                          padding: EdgeInsets.all(20),
-                          height: 200,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              GestureDetector(
-                                onTap: () => Navigator.pop(context),
-                                child: Container(
-                                  // padding: EdgeInsets.all(20),
-                                  // alignment: Alignment.topLeft,
-                                  child: Icon(
-                                    color: Colors.white,
-                                    Icons.arrow_back_ios_new_rounded,
-                                    size: 30,
+                              if (_imageurl!.isEmpty && image == null)
+                                TextButton.icon(
+                                    onPressed: () {
+                                      _pickImage();
+                                      setState(() {
+                                        status = EditStatus.Save;
+                                      });
+                                    },
+                                    icon: Icon(Icons.camera),
+                                    label: Text('Add photo')),
+                              if (_imageurl!.isNotEmpty || image != null)
+                                GestureDetector(
+                                  onTap: status == EditStatus.Save
+                                      ? _pickImage
+                                      : null,
+                                  child: CircleAvatar(
+                                    backgroundImage: image != null
+                                        ? FileImage(image!)
+                                        : NetworkImage(_imageurl!)
+                                            as ImageProvider,
+                                    radius: 50,
                                   ),
-                                  color: Colors.green,
                                 ),
+                              SizedBox(
+                                height: 40,
                               ),
-                              GestureDetector(
-                                child: Container(
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                  color: Colors.green,
-                                ),
-                              )
+                              Container(
+                                child: Text('Email'),
+                                width: double.infinity,
+                              ),
+                              TextFormField(
+                                onChanged: (value) => email = value,
+                                initialValue: snapshot.data!['email'],
+                                enabled:
+                                    status == EditStatus.Edit ? false : true,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                child: Text('Name'),
+                                width: double.infinity,
+                              ),
+                              TextFormField(
+                                onChanged: (value) => name = value,
+                                initialValue: snapshot.data!['name'],
+                                enabled:
+                                    status == EditStatus.Edit ? false : true,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                child: Text('Bio'),
+                                width: double.infinity,
+                              ),
+                              TextFormField(
+                                initialValue: bio,
+                                onChanged: (value) => bio = value,
+                                maxLength: 100,
+                                maxLines: 4,
+                                enabled:
+                                    status == EditStatus.Edit ? false : true,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
                             ],
-                          ),
+                          )),
                         ),
-                      ]),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ));
+              // SizedBox(
+              //   height: 100,
+              Container(
+                padding: EdgeInsets.all(20),
+                height: 200,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        // padding: EdgeInsets.all(20),
+                        // alignment: Alignment.topLeft,
+                        child: Icon(
+                          color: Colors.white,
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: editFunction,
+                      child: Container(
+                        child: Icon(
+                          status == EditStatus.Edit ? Icons.edit : Icons.save,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        // color: Colors.green,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ]);
+          }),
+    ));
   }
 }

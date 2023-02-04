@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gonime/providers/search_provider.dart';
 import 'package:gonime/widgets/search_card.dart';
 import 'package:provider/provider.dart';
+import '../models/search_anime.dart';
 
 class SearchList extends StatefulWidget {
   const SearchList({super.key});
@@ -30,15 +31,18 @@ class _SearchListState extends State<SearchList> {
               child: Text('Nothing found.'),
             );
           }
+
           return Column(
             children: [
               Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: const Text('Results'),
+                margin: const EdgeInsets.only(bottom: 15),
+                child: const Text('RESULTS'),
               ),
               Expanded(
                 child: ListView.builder(
                     itemBuilder: ((context, index) => SearchCard(
+                        // score: search.searchList[index].score,
+                        score: search.searchList[index].score,
                         title: search.searchList[index].title,
                         imageUrl: search.searchList[index].imageUrl,
                         id: search.searchList[index].malId)),

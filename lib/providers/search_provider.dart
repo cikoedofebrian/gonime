@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gonime/models/home_anime.dart';
 import 'package:dio/dio.dart';
+import 'package:gonime/models/search_anime.dart';
 
 class SearchProvider extends ChangeNotifier {
   // bool _isSearch = false;
@@ -18,8 +19,8 @@ class SearchProvider extends ChangeNotifier {
     _title = '';
   }
 
-  List<HomeAnime> _searchList = [];
-  List<HomeAnime> get searchList {
+  List<SearchModel> _searchList = [];
+  List<SearchModel> get searchList {
     return _searchList;
   }
 
@@ -29,11 +30,12 @@ class SearchProvider extends ChangeNotifier {
   }
 
   Future<void> searchData() async {
-    List<HomeAnime> list = [];
+    List<SearchModel> list = [];
     final url = "https://api.jikan.moe/v4/anime?q=$_title&limit=12";
     final response = await Dio().get(url);
     for (var item in response.data['data']) {
-      list.add(HomeAnime.fromJson(item));
+      final searchItem = SearchModel.fromJson(item);
+      list.add(searchItem);
     }
     _searchList = list;
   }

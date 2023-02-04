@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import '../screens/anime_details.dart';
 
 class SearchCard extends StatelessWidget {
-  const SearchCard({
-    super.key,
-    required this.title,
-    required this.imageUrl,
-    required this.id,
-  });
+  const SearchCard(
+      {super.key,
+      required this.title,
+      required this.imageUrl,
+      required this.id,
+      required this.score});
 
   final String title;
+  final double score;
   final int id;
   final String imageUrl;
 
@@ -28,21 +29,34 @@ class SearchCard extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            margin: const EdgeInsets.all(20),
-            height: 200,
+            decoration: BoxDecoration(
+                color: Colors.black, borderRadius: BorderRadius.circular(20)),
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+            padding: EdgeInsets.all(10),
+            height: 180,
             width: double.infinity,
             child: Row(
               children: [
-                SizedBox(
-                  width: 150,
-                  child: ClipRRect(
+                Container(
+                  width: 120,
+                  height: 180,
+
+                  decoration: BoxDecoration(
+                    color: Colors.black,
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.network(imageUrl),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        imageUrl,
+                      ),
+                    ),
                   ),
+                  // child: Image.network(imageUrl),
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -52,8 +66,11 @@ class SearchCard extends StatelessWidget {
                               Flexible(
                                   child: Text(
                                 title,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    overflow: TextOverflow.fade,
+                                    fontSize: title.length < 20 ? 30 : 22),
                               ))
                             ],
                           ),
@@ -61,22 +78,28 @@ class SearchCard extends StatelessWidget {
                             height: 2,
                           ),
                         ]),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            textDirection: TextDirection.rtl,
-                            children: const [
-                              Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                color: Colors.blueAccent,
+                        Row(
+                          textDirection: TextDirection.rtl,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 5),
+                              child: Icon(
+                                Icons.star_rate_rounded,
+                                color: Colors.green,
+                                size: 30,
                               ),
-                              Text(
-                                'See details',
-                                style: TextStyle(color: Colors.blueAccent),
-                              ),
-                            ],
-                          ),
-                        )
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              score != 0.0 ? '$score / 10' : "UNRATED",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -84,7 +107,6 @@ class SearchCard extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(color: Colors.grey)
         ],
       ),
     );

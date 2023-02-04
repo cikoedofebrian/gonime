@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gonime/providers/favorite_provider.dart';
-import 'package:gonime/widgets/filter.dart';
 import 'package:provider/provider.dart';
 import '../providers/anime_provider.dart';
 import '../widgets/anime_card.dart';
@@ -19,7 +18,6 @@ class _RecommendedState extends State<Recommended> {
     final animedata = Provider.of<AnimeProvider>(context).animes;
     return Column(
       children: [
-        Filter(),
         Expanded(
           child: GridView.builder(
               padding: const EdgeInsets.all(15),
