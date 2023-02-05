@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gonime/widgets/custom_progress_indicator.dart';
 import '../providers/anime_provider.dart';
 import '../providers/favorite_provider.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,7 @@ class _TopAnimeState extends State<TopAnime> {
           future: future,
           builder: (context, snapshot) =>
               snapshot.connectionState == ConnectionState.waiting
-                  ? Center(child: CircularProgressIndicator())
+                  ? Center(child: CustomProgressIndicator(color: Colors.black))
                   : Column(
                       children: [
                         Expanded(

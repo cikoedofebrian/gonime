@@ -1,11 +1,5 @@
-import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gonime/screens/login.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key, required this.imageurl, required this.name});
@@ -17,29 +11,9 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  File? _image;
-  void _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-
-    if (image != null) {
-      setState(() {
-        _image = File(image.path);
-      });
-    }
-  }
-
-  final user = FirebaseAuth.instance.currentUser!.uid;
-  // late Future data;
   @override
   void initState() {
-    // TODO: implement initState
-    print(user);
     super.initState();
-    // data = Future.wait([
-    //   FirebaseStorage.instance.ref('profile_image/$user.jpg').getDownloadURL(),
-    //   FirebaseFirestore.instance.collection('users').doc(user).get()
-    // ]);
   }
 
   @override
@@ -60,10 +34,18 @@ class _AppDrawerState extends State<AppDrawer> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           GestureDetector(
-                            onTap: () =>
-                                Navigator.of(context).pushNamed('/profile'),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pushNamed('/profile');
+                            },
                             child: CircleAvatar(
                                 radius: 30,
+                                child: widget.imageurl.isEmpty
+                                    ? Icon(
+                                        Icons.account_circle_rounded,
+                                        size: 40,
+                                      )
+                                    : null,
                                 backgroundImage: widget.imageurl.isNotEmpty
                                     ? NetworkImage(widget.imageurl)
                                     : null),

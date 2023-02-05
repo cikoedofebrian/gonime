@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:gonime/providers/search_provider.dart';
+import 'package:gonime/widgets/custom_progress_indicator.dart';
 import 'package:gonime/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 import '../providers/favorite_provider.dart';
@@ -56,9 +57,7 @@ class _HomeState extends State<HomeScreen> {
         future: data,
         builder: (context, snapshot) =>
             snapshot.connectionState == ConnectionState.waiting
-                ? Center(
-                    child: CircularProgressIndicator(color: Colors.white),
-                  )
+                ? Center(child: CustomProgressIndicator(color: Colors.white))
                 : Scaffold(
                     floatingActionButton: _selectedPage == 1
                         ? FloatingActionButton(

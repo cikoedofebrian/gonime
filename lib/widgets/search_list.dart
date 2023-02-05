@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gonime/providers/search_provider.dart';
+import 'package:gonime/widgets/custom_progress_indicator.dart';
 import 'package:gonime/widgets/search_card.dart';
 import 'package:provider/provider.dart';
 import '../models/search_anime.dart';
@@ -23,7 +24,8 @@ class _SearchListState extends State<SearchList> {
         future: search.searchData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CustomProgressIndicator(color: Colors.black));
           }
 
           if (search.searchList.isEmpty) {
