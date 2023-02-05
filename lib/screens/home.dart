@@ -32,13 +32,7 @@ class _HomeState extends State<HomeScreen> {
   void initState() {
     super.initState();
     data = Future.wait([
-      Provider.of<FavoriteProvider>(context, listen: false)
-          .getDatabase()
-          .whenComplete(
-            () => Provider.of<FavoriteProvider>(context, listen: false)
-                .getByList(Provider.of<FavoriteProvider>(context, listen: false)
-                    .favorites),
-          ),
+      Provider.of<FavoriteProvider>(context, listen: false).getDatabase(),
       Provider.of<AnimeProvider>(context, listen: false).fetchData(),
       FirebaseFirestore.instance.collection('users').doc(user).get()
     ]);
@@ -55,64 +49,63 @@ class _HomeState extends State<HomeScreen> {
     return SafeArea(
       child: FutureBuilder(
         future: data,
-        builder: (context, snapshot) =>
-            snapshot.connectionState == ConnectionState.waiting
-                ? Center(child: CustomProgressIndicator(color: Colors.white))
-                : Scaffold(
-                    floatingActionButton: _selectedPage == 1
-                        ? FloatingActionButton(
-                            backgroundColor: Colors.red,
-                            onPressed: Provider.of<FavoriteProvider>(context,
-                                    listen: false)
-                                .reverseList,
-                            child: Icon(Icons.sort),
-                          )
-                        : null,
-                    drawer: AppDrawer(
-                        imageurl: snapshot.data[2]['imageurl'],
-                        name: snapshot.data[2]['name']),
-                    appBar: AppBar(
-                      centerTitle: true,
-                      backgroundColor: Colors.black,
-                      title: const Text('GoNime'),
-                      actions: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: IconButton(
-                            onPressed: () =>
-                                Navigator.pushNamed(context, '/search-screen')
-                                    .then((value) =>
-                                        Provider.of<SearchProvider>(context,
-                                                listen: false)
-                                            .title_removed()),
-                            icon: const Icon(
-                              Icons.search,
-                              size: 26,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    body: _page[_selectedPage],
-                    bottomNavigationBar: SizedBox(
-                      height: 70,
-                      child: BottomNavigationBar(
-                        backgroundColor: Colors.black,
-                        selectedItemColor: Colors.white,
-                        unselectedItemColor: Colors.grey,
-                        unselectedFontSize: 10,
-                        selectedFontSize: 10,
-                        currentIndex: _selectedPage,
-                        items: const [
-                          BottomNavigationBarItem(
-                              icon: Icon(Icons.home), label: 'Home'),
-                          BottomNavigationBarItem(
-                              icon: Icon(Icons.favorite), label: 'Favorite'),
-                        ],
-                        onTap: (value) => _changePage(value),
+        builder: (context, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? Center(child: CustomProgressIndicator(color: Colors.white))
+            : Scaffold(
+                floatingActionButton: _selectedPage == 1
+                    ? FloatingActionButton(
+                        backgroundColor: Colors.red,
+                        onPressed: () => Provider.of<FavoriteProvider>(context,
+                                listen: false)
+                            .reverseList,
+                        child: Icon(Icons.sort),
+                      )
+                    : null,
+                drawer: AppDrawer(
+                    imageurl: snapshot.data[2]['imageurl'],
+                    name: snapshot.data[2]['name']),
+                appBar: AppBar(
+                  centerTitle: true,
+                  backgroundColor: Colors.black,
+                  title: const Text('GoNime'),
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: IconButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/search-screen').then(
+                                (value) => Provider.of<SearchProvider>(context,
+                                        listen: false)
+                                    .title_removed()),
+                        icon: const Icon(
+                          Icons.search,
+                          size: 26,
+                        ),
                       ),
-                    ),
+                    )
+                  ],
+                ),
+                body: _page[_selectedPage],
+                bottomNavigationBar: SizedBox(
+                  height: 70,
+                  child: BottomNavigationBar(
+                    backgroundColor: Colors.black,
+                    selectedItemColor: Colors.white,
+                    unselectedItemColor: Colors.grey,
+                    unselectedFontSize: 10,
+                    selectedFontSize: 10,
+                    currentIndex: _selectedPage,
+                    items: const [
+                      BottomNavigationBarItem(
+                          icon: Icon(Icons.home), label: 'Home'),
+                      BottomNavigationBarItem(
+                          icon: Icon(Icons.favorite), label: 'Favorite'),
+                    ],
+                    onTap: (value) => _changePage(value),
                   ),
+                ),
+              ),
       ),
     );
   }
